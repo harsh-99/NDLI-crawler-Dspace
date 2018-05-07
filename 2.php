@@ -51,57 +51,71 @@ $xpath = new DOMXPath ( $doc );
 //   }
 // }
 
-$items2 = $xpath->query ( "//li[@class = 'ds-artifact-item community odd']" );
-//print_r ($items2);
-if (!is_null($items2)) {
-  foreach ($items2 as $item2) {
-    // echo "[". $item2->nodeName. "]\n";
-    $items3 = $xpath->query ( "./div/div/a", $item2 );
-    if (!is_null($items3)) {
-        // echo "Hello";
-        // print_r($items3);
-        foreach ($items3 as $item3) {
-            $items4 = $xpath->query ( "./ul/li/div/div/a", $item2 );
-            if (!is_null($items4)) {
-            // echo "Hello";
-            // print_r($items3);
-            foreach ($items4 as $item4) {
-             // print_r($item3);
-              // echo "Hello1";
-              $nodes4 = $item4->childNodes;
-              foreach ($nodes4 as $node4) {
-                echo $node4->nodeValue. "\n";
-            }
-        }
-    }
-            // print_r($item3);
-            // echo "Hello1";
-            $nodes3 = $item3->childNodes;
-            foreach ($nodes3 as $node3) {
-                echo $node3->nodeValue. "\n";
-            }
-        }
-    }
+// $items2 = $xpath->query ( "//li[@class = 'ds-artifact-item community odd']" );
+// //print_r ($items2);
+// if (!is_null($items2)) {
+//   foreach ($items2 as $item2) {
+//     // echo "[". $item2->nodeName. "]\n";
+//     $items3 = $xpath->query ( "./div/div/a", $item2 );
+//     if (!is_null($items3)) {
+//         // echo "Hello";
+//         // print_r($items3);
+//         foreach ($items3 as $item3) {
+//             $items4 = $xpath->query ( "./ul/li/div/div/a", $item2 );
+//             if (!is_null($items4)) {
+//             // echo "Hello";
+//             // print_r($items3);
+//             foreach ($items4 as $item4) {
+//              // print_r($item3);
+//               // echo "Hello1";
+//               $nodes4 = $item4->childNodes;
+//               foreach ($nodes4 as $node4) {
+//                 echo $node4->nodeValue. "\n";
+//             }
+//         }
+//     }
+//             // print_r($item3);
+//             // echo "Hello1";
+//             $nodes3 = $item3->childNodes;
+//             foreach ($nodes3 as $node3) {
+//                 echo $node3->nodeValue. "\n";
+//             }
+//         }
+//     }
     
-    $nodes2 = $item2->childNodes;
-    foreach ($nodes2 as $node2) {
-       // echo $node2->nodeValue. "\n";
-        // print_r($node2);
-        // echo "Hello";
+//     $nodes2 = $item2->childNodes;
+//     foreach ($nodes2 as $node2) {
+//        // echo $node2->nodeValue. "\n";
+//         // print_r($node2);
+//         // echo "Hello";
 
-    }
-        // exit(0);
-  }
-}
-// $items3 = $xpath->query ( "//li[@class = 'ds-artifact-item community odd']/div/div/a" );
+//     }
+//         // exit(0);
+//   }
+// }
+// $items3 = $xpath->query ( "//li[@class = 'ds-artifact-item community odd']/div/div/a/span" );
 // // print_r ($items2);
 // if (!is_null($items3)) {
 //   foreach ($items3 as $item3) {
-//     echo "[". $item3->nodeName. "]\n";
+//     $items7 = $xpath->query ("../../../..", $item3);
+//     // echo "[". $item3->nodeName. "]\n";
+//     if (!is_null($items7)) {
+//   foreach ($items7 as $item7) {
+//     // print_r ($item7->getAttribute("href"));
+    
+//     // echo "[". $item7->nodeName. "]\n";
+
+//     $nodes7 = $item7->childNodes;
+//     foreach ($nodes7 as $node7) {
+//       echo $node7->nodeValue. "\n";
+
+//     }
+//   }
+// }
 
 //     $nodes3 = $item3->childNodes;
 //     foreach ($nodes3 as $node3) {
-//       echo $node3->nodeValue. "\n";
+//       // echo $node3->nodeValue. "\n";
 //       // print_r($node3);
 //     }
 //   }
@@ -169,6 +183,57 @@ if (!is_null($items2)) {
 // /html/body/div[1]/div[4]/div/div[1]/div/ul/li/ul[2]/li[1]/ul/li[1]/div/div/a/span
 // /html/body/div[1]/div[4]/div/div[1]/div/ul/li/ul[2]/li[2]/div/div/a/span
 // /html/body/div[1]/div[4]/div/div[1]/div/ul/li/ul[2]/li[3]/div/div[1]/a/span
+function traverser($items1,$xpath){
+    // echo "Hello\n";
+    $c =0;
+    $s = 0;
+    if (!is_null($items1)) {
+      foreach ($items1 as $item1) {
+        // echo "[". $item1->nodeName. "]\n";
+        
+        $items2 = $xpath->query ( "./li", $item1 );
+        if (!is_null($items2)) {
+            // print_r ($items2);
+            foreach ($items2 as $item2) {
+              $items3 = $xpath->query("./div/div/a/span", $item2);
+              if (!is_null($items3)) {
+              foreach ($items3 as $item3) {
 
+                $items4 = $xpath->query("../../../../ul", $item3);
+
+                $nodes3 = $item3->childNodes;
+                // $s+=1;
+                // print_r($s);
+                foreach ($nodes3 as $node3) {
+                  // $c+=1;
+                  // print_r($c);  
+                  echo $node3->nodeValue. "\n";
+                  traverser($items4,$xpath);
+                }
+              }
+            }
+
+        $nodes2 = $item2->childNodes;
+            foreach ($nodes2 as $node2) {
+                // 
+                // echo $node2->nodeValue. "\n";
+                // $items3 = $xpath->query ( "./li/ul", $item2 );
+                // traverser($items3,$xpath);
+                }
+            }
+        }
+
+        $nodes1 = $item1->childNodes;
+        foreach ($nodes1 as $node1) {
+          // echo $node1->nodeValue. "\n";
+
+        }
+    }
+    
+}
+else return;
+}
+$items1 = $xpath->query ( "//div[@id='ds-body']/div/ul" );
+traverser($items1,$xpath);
 
 ?>
