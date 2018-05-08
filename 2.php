@@ -1,5 +1,5 @@
 <?php
-$url = 'http://210.212.228.207/community-list';
+$url = 'http://210.212.91.105:8080/xmlui/community-list';
 $curl_options = array (
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_RETURNTRANSFER => true,
@@ -14,7 +14,7 @@ $curl = curl_init ( $url );
 curl_setopt_array ( $curl, $curl_options );
 $response = curl_exec ( $curl );
 curl_close ( $curl );
-// echo $response;
+echo $response;
 
 // ibxml_use_internal_errors ( true );
 $doc = new DOMDocument ();
@@ -183,9 +183,9 @@ $xpath = new DOMXPath ( $doc );
 // /html/body/div[1]/div[4]/div/div[1]/div/ul/li/ul[2]/li[1]/ul/li[1]/div/div/a/span
 // /html/body/div[1]/div[4]/div/div[1]/div/ul/li/ul[2]/li[2]/div/div/a/span
 // /html/body/div[1]/div[4]/div/div[1]/div/ul/li/ul[2]/li[3]/div/div[1]/a/span
-function traverser($items1,$xpath){
+function traverser($items1,$xpath,$c){
     // echo "Hello\n";
-    $c =0;
+    
     $s = 0;
     if (!is_null($items1)) {
       foreach ($items1 as $item1) {
@@ -205,10 +205,10 @@ function traverser($items1,$xpath){
                 // $s+=1;
                 // print_r($s);
                 foreach ($nodes3 as $node3) {
-                  // $c+=1;
-                  // print_r($c);  
+                  $c+=1;
+                  print_r($c);  
                   echo $node3->nodeValue. "\n";
-                  traverser($items4,$xpath);
+                  traverser($items4,$xpath,0);
                 }
               }
             }
@@ -231,9 +231,12 @@ function traverser($items1,$xpath){
     }
     
 }
-else return;
+else {
+	return;
 }
+}
+$c =0;
 $items1 = $xpath->query ( "//div[@id='ds-body']/div/ul" );
-traverser($items1,$xpath);
+traverser($items1,$xpath,$c);
 
 ?>
