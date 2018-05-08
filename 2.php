@@ -195,21 +195,24 @@ function traverser($items1,$xpath,$c){
         if (!is_null($items2)) {
             // print_r ($items2);
             foreach ($items2 as $item2) {
-              $items3 = $xpath->query("./div/div/a/span", $item2);
+              $items3 = $xpath->query("./div/div/a", $item2);
               if (!is_null($items3)) {
               foreach ($items3 as $item3) {
 
-                $items4 = $xpath->query("../../../../ul", $item3);
+                $items4 = $xpath->query("../../../ul", $item3);
 
                 $nodes3 = $item3->childNodes;
-                // $s+=1;
+                 $c+=1;
+                echo"\n";
+                print_r($c);
+                print_r ($item3->getAttribute("href"));
+               // $s+=1;
                 // print_r($s);
                 foreach ($nodes3 as $node3) {
-                  $c+=1;
-                  print_r($c);  
-                  echo $node3->nodeValue. "\n";
-                  traverser($items4,$xpath,0);
+                    
+                  echo $node3->nodeValue. "\n"; 
                 }
+                traverser($items4,$xpath,0);
               }
             }
 
