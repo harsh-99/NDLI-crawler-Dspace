@@ -14,7 +14,7 @@ $curl = curl_init ( $url );
 curl_setopt_array ( $curl, $curl_options );
 $response = curl_exec ( $curl );
 curl_close ( $curl );
-echo $response;
+// echo $response;
 
 // ibxml_use_internal_errors ( true );
 $doc = new DOMDocument ();
@@ -183,43 +183,40 @@ $xpath = new DOMXPath ( $doc );
 // /html/body/div[1]/div[4]/div/div[1]/div/ul/li/ul[2]/li[1]/ul/li[1]/div/div/a/span
 // /html/body/div[1]/div[4]/div/div[1]/div/ul/li/ul[2]/li[2]/div/div/a/span
 // /html/body/div[1]/div[4]/div/div[1]/div/ul/li/ul[2]/li[3]/div/div[1]/a/span
-function traverser($items1,$xpath,$c){
-    // echo "Hello\n";
-    
-    $s = 0;
+function traverser($items1,$xpath,$c,$c_prev){
     if (!is_null($items1)) {
       foreach ($items1 as $item1) {
-        // echo "[". $item1->nodeName. "]\n";
-        
         $items2 = $xpath->query ( "./li", $item1 );
         if (!is_null($items2)) {
-            // print_r ($items2);
             foreach ($items2 as $item2) {
               $items3 = $xpath->query("./div/div/a", $item2);
               if (!is_null($items3)) {
               foreach ($items3 as $item3) {
 
                 $items4 = $xpath->query("../../../ul", $item3);
-
                 $nodes3 = $item3->childNodes;
-                 $c+=1;
-                echo"\n";
-                print_r($c);
-                print_r ($item3->getAttribute("href"));
-               // $s+=1;
-                // print_r($s);
+                $c_prev = $c;
+                // echo"\nThe previous value of c is ". $c_prev. "\n";
+                $c+=1;
+                
+                // print_r($c);
+                // print_r ($item3->getAttribute("href"));
                 foreach ($nodes3 as $node3) {
-                    
-                  echo $node3->nodeValue. "\n"; 
+                  // if($c == 1){
+                  // 	array_push($structure[$c_prev], array() )
+                  // }  
+                  // echo $node3->nodeValue. "\n"; 
+                  // array_push($structure,$node3->nodeValue);
                 }
-                traverser($items4,$xpath,0);
+                traverser($items4,$xpath,0,$c_prev);
               }
             }
 
         $nodes2 = $item2->childNodes;
-            foreach ($nodes2 as $node2) {
-                // 
-                // echo $node2->nodeValue. "\n";
+        	
+            foreach ($nodes2 as $node2) { 
+                	echo $node2->nodeValue. "\n";
+                
                 // $items3 = $xpath->query ( "./li/ul", $item2 );
                 // traverser($items3,$xpath);
                 }
@@ -231,8 +228,7 @@ function traverser($items1,$xpath,$c){
           // echo $node1->nodeValue. "\n";
 
         }
-    }
-    
+    }    
 }
 else {
 	return;
@@ -240,6 +236,6 @@ else {
 }
 $c =0;
 $items1 = $xpath->query ( "//div[@id='ds-body']/div/ul" );
-traverser($items1,$xpath,$c);
+traverser($items1,$xpath,0,$c);
 
 ?>
