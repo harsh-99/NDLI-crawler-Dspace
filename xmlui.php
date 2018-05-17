@@ -29,34 +29,23 @@ function traverser($items1,$xpath,$c,$flag){
         if (!is_null($items2)) {
             foreach ($items2 as $item2) {
               $items3 = $xpath->query("./div/div/a", $item2);
-              // $items3 = $xpath->query("./div/h4/a", $item2);
               if (!is_null($items3)) {
               foreach ($items3 as $item3) {
                 $items4 = $xpath->query("../../../ul", $item3);
-                // $items4 = $xpath->query("../../ul", $item3);
                 $nodes3 = $item3->childNodes;
                 $obj = new stdClass ();
                 $obj->flag = $flag;
-                echo"\nThe flag value is ". $flag. "\n";
                 $c+=1;                
-                print_r($c);
                 $s =0;
-                print_r ($item3->getAttribute("href"));
                 $obj->href = $item3->getAttribute("href");
                 foreach ($nodes3 as $node3) {
                 $s += 1;
-                // print_r($i);
-                // echo $node3->nodeValue. "\n";
                 if ($s==2){ 
                   $a = $node3->nodeValue;
-                  echo $node3->nodeValue. "\n";
-                  // echo "Helloin";
                   $obj->name= $a; 
                   array_push($GLOBALS["structure"],$obj);
                 }
-                
-                
-                  // array_push($structure,$node3->nodeValue);
+                                
                 }
               
                 traverser($items4,$xpath,0,$flag+1);
@@ -73,10 +62,6 @@ function traverser($items1,$xpath,$c,$flag){
 	  return;
   }
 }
-// function hello(){
-//   $GLOBALS["i"] +=1;
-//   print_r($GLOBALS["i"]);
-// }
 $i =0;
 
 function getarray($structure){
@@ -87,58 +72,34 @@ function getarray($structure){
       $lag->child = array();
       $lag->name = $structure[$GLOBALS["i"]]->name;
       $lag->href = $structure[$GLOBALS["i"]]->href;
-      // echo "\n";
-      // print_r($structure[$GLOBALS["i"]]->name);
       array_push($list, $lag);
-      // print_r($list);
-      // echo "Pushed";
-      // print_r($GLOBALS["i"]);
       $GLOBALS["i"]+=1;
     }
    else if((($structure[$GLOBALS["i"]]->flag)+1) == ($structure[$GLOBALS["i"]+1]->flag) ){
     $lag->name = $structure[$GLOBALS["i"]]->name;
     $lag->href = $structure[$GLOBALS["i"]]->href;
-    // print_r($structure[$GLOBALS["i"]]->name);
-    // echo "\n";
     $GLOBALS["i"] += 1;
     $lag->child = getarray($structure);
     array_push($list, $lag);
-    // // print_r($list);
-    // echo "Pushed";
-    // print_r($GLOBALS["i"]);
-    // echo "\n\n";
-    // // exit();
    }
    else if (($structure[$GLOBALS["i"]]->flag) == (($structure[$GLOBALS["i"]+1]->flag)+1)){
     $lag->name = $structure[$GLOBALS["i"]]->name;
     $lag->href = $structure[$GLOBALS["i"]]->href;
-    // echo "\n";
-    // print_r($structure[$GLOBALS["i"]]->name);
     $lag->child = array();
     array_push($list, $lag);
     $GLOBALS["i"] += 1;
-    // // print_r($list);
-    // echo "Pushed";
-    // print_r($GLOBALS["i"]);
-    // echo "\n";
     return $list;
    } 
   }
   return $list;
   exit();
 }
-// i should be updated, it should not get affected by recursion  
 $c =0;
-// $items1 = $xpath->query ( "//div[@class='container']/ul[@class='media-list']" );
 $items1 = $xpath->query ( "//div[@id='ds-body']/div/ul" );
 traverser($items1,$xpath,0,0);
 print_r($structure);
 $t = count($structure);
-// echo("The value of count is iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-// print_r($t);
 $new = array();
 $new = getarray($structure);
-// // echo "Hell\n";
 print_r($new);
-// echo "hjvhvjvhjvhjhvj \n";
 ?>
